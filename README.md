@@ -5,12 +5,12 @@
 
 Provides lists of courses pulled from the Cornell course roster API by subject and semester
 
-- Controller to list all courses for all subjects (per that domain's settings) per semester
+- Controller to list all courses for all subjects per semester
 - Twig function to get current list of semesters
 - Twig function to get semester labels
 - Twig function to get courses for subject, semester as summary expanded to details
 - Twig function to get courses for semester, instructor netid
-- Settings form to select which semesters, (subjects) to display and default semester for bare route
+- Settings form to select which semesters, subjects to display and default semester for bare route
 
 ## CONFIGURATION
 - Enable the module as you would any other module
