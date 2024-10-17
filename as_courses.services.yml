@@ -1,0 +1,17 @@
+services:
+  as_courses.parseCoursesJson:
+    class: Drupal\as_courses\parseCoursesJson
+    tags:
+      - { name: twig.extension }
+  as_courses.parsePersonCoursesJson:
+    class: Drupal\as_courses\parsePersonCoursesJson
+    tags:
+      - { name: twig.extension }
+  as_courses.parseSemesterName:
+    class: Drupal\as_courses\parseSemesterName
+    tags:
+      - { name: twig.extension }
+  as_courses.getCurrentSemesters:
+    class: Drupal\as_courses\getCurrentSemesters
+    tags:
+      - { name: twig.extension }

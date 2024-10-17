@@ -1,0 +1,6 @@
+as_courses.settings:
+ title: 'A&S Courses Semesters'
+ description: 'Select which semesters to display for A&S Courses API integration'
+ parent: system.admin_config_services
+ route_name: as_courses.settings
+ weight: 101
