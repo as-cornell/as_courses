@@ -1,5 +1,3 @@
-{#
-
 /* -------------------------
 
 Title: node--courses.html.twig
@@ -8,17 +6,22 @@ Descr: outputs twig content from courses json parser for full courses view
 --------------------------- */
 
 #}
-{# add fancybox #}
-{{attach_library('discovery/fancybox')}}
+{# add data tables from theme #}
+{{attach_library('discovery/courses')}}
+{{attach_library('discovery/accordion')}}
+#}
 
 {# set variables for json parser #}
 {% set courses_shown = '' %}
 {% set list_order = '' %}
 {# prefixes from theme settings #}
-{% set keyword_params = department_prefix|split(',') %}
+{#  set keyword_params = department_prefix|split(',') #}
 {# prefixes from module settings #}
 {% set keyword_params = course_prefixes|split(',') %}
-{% set semstertext = semestername[semester] %}
+{# make semester labels and lists #}
+{# set semstertext = semestername[semester] #}
+{% set semesterlist = get_current_semesters() %}
+
 
 {# set classes for the container #}
 {%
@@ -30,26 +33,40 @@ Descr: outputs twig content from courses json parser for full courses view
   ]
 %}
 
-<main{{attributes.addClass(blockClasses)}}>
+<main{{attributes.addClass(blockClasses)}} id="mainContent">
   {{title_suffix}}
   <div class="title">
-    {% include "@content/atoms/_heading.twig" with {
+    {# {% include "@discovery/components/content/atoms/_heading.twig" with {
     "heading_level" : 1,
     "heading" : 'Courses',
     "heading_base_class" : "title"
-  } %}
+  } %} #}
+    <h2>Courses</h2>
   </div>
 
   <div class="content">
+  {# list of semesters if there are more than 1 currently displayed #}
+  {% if semesterlist|length > 1 %}
+  <h4>Courses by semester</h4>
     <ul class='inlineList'>
-      <span>Courses by semester: </span>
-        {% for key,value in semestername %}
-          <li><a href='/courses/{{ key }}'>{{ value }}</a></li>
+        {% for key,value in semesterlist %}
+          <li><a href='/courses/{{ key }}'>
+          {{parse_semester_name(value)}}
+          </a></li>
         {% endfor %}
     </ul>
+  {% endif %}
+  
     <h3>
-      Courses for {{semstertext}}
+      Courses for {{parse_semester_name(semester)}}
     </h3>
+<p>
+  Complete Cornell University course descriptions and section times are in the
+  <a href="https://classes.cornell.edu/browse/roster/{{semester}}/subject/{{keyword_params.0}}">
+    Class Roster</a>.
+</p>
+<p></p>
+
     <table id="courses--table" class="courses--table">
       <thead>
         <tr>
@@ -63,14 +80,29 @@ Descr: outputs twig content from courses json parser for full courses view
       {% for keyword_param in keyword_params %}
         {% set courses = parse_courses_json(semester,keyword_param,courses_shown,list_order) %}
           {% for course in courses %}
+          {# {{vardumper(course)}} #}
+          {# {{ course.catalogDistr }} #}
             <tr class="course course--table-row">
               <td class="course__number">
                 {{course.subject}}{{course.number}}
               </td>
               <td class="course__content">
-              <span class="course__title">{{course.title}}<button class="toggle toggle--course-detail course__show-more">Show more</button></span>
+              <span class="course__title">{{course.title}}              
+              </span>   
+              <button class="toggle accordionToggle toggle--withText">
+              <span>
+                Details
+              </span>
+                <svg class="" viewBox="0 0 24 24">
+                <use xlink:href="#chevron-down"></use>
+                </svg>
+              </button>
               <span class="course__description">
-                {{course.description}}
+              <div>
+               <p> {{course.description|striptags}}</p>
+                {% if course.catalogDistr %}
+                  <p><strong>Catalog Distribution:</strong>  {{ course.catalogDistr }}</p>
+                {% endif %}
                 <p><a href="https://classes.cornell.edu/browse/roster/{{semester}}/class/{{course.subject}}/{{course.number}}">
               Full details for
               {{course.subject}}
@@ -78,6 +110,7 @@ Descr: outputs twig content from courses json parser for full courses view
               -
               {{course.title}}</a></p>
               </span>
+              </div>
               </td>
               <td class="course__offered">
                 {{course.offered}}
