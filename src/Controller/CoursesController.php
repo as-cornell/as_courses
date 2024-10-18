@@ -19,11 +19,13 @@ class CoursesController extends ControllerBase {
             $semester = $defaultsemester;
         }
       }
+      $course_prefixes = \Drupal::config("as_courses.defaults")->get("course_prefixes");
 
 
     return [
       '#theme' => 'courses',
-      '#semester' => $semester
+      '#semester' => $semester,
+      '#course_prefixes' => $course_prefixes
     ];
 
   }

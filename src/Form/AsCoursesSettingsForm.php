@@ -70,6 +70,14 @@ class AsCoursesSettingsForm extends ConfigFormBase {
    '#default_value' => $config->get('defaultsemester')
   );
 
+  // Course prefixes in case there's no prefixes via department theme settings
+  $form['course_prefixes'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Course Prefixes'),
+    '#default_value' => $config->get('course_prefixes'),
+    '#description'   => t("Comma separated list of course prefixes to pass to API. Example: PSYCH,ECON,HIST"),
+  );
+
     return parent::buildForm($form,$form_state);
   }
 
@@ -84,6 +92,7 @@ class AsCoursesSettingsForm extends ConfigFormBase {
     $this->config('as_courses.defaults')
       ->set('semester', $form_state->getValue('semester'))
       ->set('defaultsemester', $form_state->getValue('defaultsemester'))
+      ->set('course_prefixes', $form_state->getValue('course_prefixes'))
       ->set('sort', $form_state->getValue('sort'))
       ->save();
   }
