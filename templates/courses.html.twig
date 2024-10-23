@@ -14,9 +14,12 @@ Descr: outputs twig content from courses json parser for full courses view
 {# set variables for json parser #}
 {% set courses_shown = '' %}
 {% set list_order = '' %}
-{# prefixes from theme settings #}
-{#  set keyword_params = department_prefix|split(',') #}
-{# prefixes from module settings #}
+
+{# keyword_params (prefixes) from theme settings #}
+{% if department_prefix %}
+  {%  set keyword_params = department_prefix|split(',') %}
+{% endif %}
+{# keyword_params (prefixes) from module settings #}
 {% if course_prefixes %}
   {% set keyword_params = course_prefixes|split(',') %}
 {% endif %}
