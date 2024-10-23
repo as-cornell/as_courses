@@ -17,7 +17,9 @@ Descr: outputs twig content from courses json parser for full courses view
 {# prefixes from theme settings #}
 {#  set keyword_params = department_prefix|split(',') #}
 {# prefixes from module settings #}
-{% set keyword_params = course_prefixes|split(',') %}
+{% if course_prefixes %}
+  {% set keyword_params = course_prefixes|split(',') %}
+{% endif %}
 {# make semester labels and lists #}
 {# set semstertext = semestername[semester] #}
 {% set semesterlist = get_current_semesters() %}
