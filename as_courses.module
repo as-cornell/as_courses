@@ -105,7 +105,7 @@ function as_courses_help($route_name, RouteMatchInterface $route_match) {
 function as_courses_theme($existing, $type, $theme, $path) {
   return [
     'courses' => [
-      'variables' => ['semester' => NULL, 'semestername' => NULL],
+      'variables' => ['semester' => NULL, 'semestername' => NULL 'course_prefixes' => NULL],
     ],
   ];
 }
