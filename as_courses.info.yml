@@ -1,5 +1,5 @@
 name: 'A&S Courses'
 type: module
 description: 'Turns json from classes.cornell.edu into twiggable variables for display.'
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^9.5 || ^10 || ^11
 package: 'AS'
