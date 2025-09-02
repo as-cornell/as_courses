@@ -9,8 +9,8 @@ as_courses.courses:
   path: '/courses'
   defaults:
     _controller: '\Drupal\as_courses\Controller\CoursesController::content'
-    _title: 'Courses DEF'
-    semester: 'SP24'
+    _title: 'Courses'
+    semester: ''
   requirements:
     _permission: 'access content'
 as_courses.settings:
