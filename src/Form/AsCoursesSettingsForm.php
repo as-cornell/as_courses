@@ -27,6 +27,7 @@ class AsCoursesSettingsForm extends ConfigFormBase {
     $form['semester'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Semesters to display in tabs.'),
+    '#description' => t('Will only display tabs if more than one semester is selected.'),
     '#options' => array(
      'FA23' => t('Fall 2023'),
      'WI24' => t('Winter 2024'),
