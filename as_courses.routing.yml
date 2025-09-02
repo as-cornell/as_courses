@@ -17,6 +17,6 @@ as_courses.settings:
   path: 'admin/config/services/as-courses-settings'
   defaults:
    _form: '\Drupal\as_courses\Form\AsCoursesSettingsForm'
-   _title: 'A&S Courses Semesters'
+   _title: 'A&S Courses Settings'
   requirements:
     _permission: 'administer site configuration'
