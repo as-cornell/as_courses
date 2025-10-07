@@ -38,24 +38,23 @@ class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension
    */
   public function parse_person_courses_json($semester,$keyword_params,$netid)
   {
-    $person_course_record = [];
     $courses_json = [];
+    $person_course_record = [];
     $filternetid = '';
     $course_record = [];
     $showdebug = '';
-    if (PANTHEON_ENVIRONMENT == 'lando' || PANTHEON_ENVIRONMENT == 'dev'){
-      $showdebug = TRUE;
-    }
+    //if (PANTHEON_ENVIRONMENT == 'lando' || PANTHEON_ENVIRONMENT == 'dev'){
+      //$showdebug = TRUE;
+    //}
 
 
     $courses_json = as_courses_get_courses_json($semester,$keyword_params);
-    //$courses_json = as_courses_get_courses_netid_json($semester,$netid);
     //$dump($courses_json);
 
     if (!empty($courses_json)) {
-      foreach ($courses_json as $course_data) {
+      foreach ($courses_json as $course_json) {
         //$dump($course_data['data']['classes']);
-        $enrollgroups = $course_data['enrollGroups'];
+        $enrollgroups = $course_json['enrollGroups'];
         if (!empty($enrollgroups)){
             foreach ($enrollgroups as $enrollgroup) {
               foreach ($enrollgroup['classSections'] as $section) {
@@ -68,9 +67,9 @@ class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension
                         //check each record for $netid
                         if ($filternetid === $netid) {
                           $course_record = array(
-                            'subject' => $course_data['subject'], 
-                            'number' => $course_data['catalogNbr'], 
-                            'title' => $course_data['titleLong']
+                            'subject' => $course_json['subject'], 
+                            'number' => $course_json['catalogNbr'], 
+                            'title' => $course_json['titleLong']
                           );
                             $person_course_record[] = $course_record;
                         }
@@ -85,8 +84,8 @@ class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension
     // remove duplicate entries from array
     $person_course_record = array_unique($person_course_record, SORT_REGULAR);
     if ($showdebug == TRUE) {
-    dump('parse_person_courses_json');
-    dump($person_course_record);
+      dump('parse_person_courses_json');
+      dump($person_course_record);
     }
     return $person_course_record;
   }

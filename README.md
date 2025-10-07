@@ -10,6 +10,7 @@ Provides lists of courses pulled from the Cornell course roster API by subject a
 - Twig function to get semester labels
 - Twig function to get courses for subject, semester, count as summary expanded to details
 - Twig function to get courses for semester, instructor netid
+- Twig function to get courses for semester, subjects, instructor netid
 - Settings form to select which semesters, subjects to display and default semester for bare route
 - Themable twig template for default controller
 

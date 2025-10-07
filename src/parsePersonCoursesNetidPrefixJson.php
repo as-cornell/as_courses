@@ -42,11 +42,13 @@ class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtensio
     $filtersubject = '';
     $course_record = [];
     $showdebug = '';
-    if (PANTHEON_ENVIRONMENT == 'lando' || PANTHEON_ENVIRONMENT == 'dev'){
-      $showdebug = TRUE;
-    }
+    //if (PANTHEON_ENVIRONMENT == 'lando' || PANTHEON_ENVIRONMENT == 'dev'){
+      //$showdebug = TRUE;
+    //}
 
     $courses_json = as_courses_get_courses_netid_json($semester,$netid);
+    //$dump($courses_json);
+
     if (!empty($courses_json[0])) {
       foreach ($courses_json as $course_json) {
         $filtersubject = $course_json['subject'];
@@ -69,7 +71,7 @@ class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtensio
     $person_course_record = array_unique($person_course_record, SORT_REGULAR);
     if ($showdebug == TRUE) {
       dump('parse_person_courses_netid_prefix_json');
-    dump($person_course_record);
+      dump($person_course_record);
     }
     return $person_course_record;
   }
