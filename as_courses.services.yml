@@ -7,6 +7,14 @@ services:
     class: Drupal\as_courses\parsePersonCoursesJson
     tags:
       - { name: twig.extension }
+  as_courses.parsePersonCoursesNetidJson:
+    class: Drupal\as_courses\parsePersonCoursesNetidJson
+    tags:
+      - { name: twig.extension }
+  as_courses.parsePersonCoursesNetidPrefixJson:
+    class: Drupal\as_courses\parsePersonCoursesNetidPrefixJson
+    tags:
+      - { name: twig.extension }
   as_courses.parseSemesterName:
     class: Drupal\as_courses\parseSemesterName
     tags:

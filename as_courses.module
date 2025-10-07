@@ -28,15 +28,20 @@ foreach ($a_char as $temp){
 return ucfirst($string);
 }
 
+
+/**
+ * Fetches list of courses by semester and course prefix
+ */
+
 function as_courses_get_courses_json($semester,$keyword_params) {
 //set cache id (verify parameters are safe values to use as cache id)
 $cid = "as_courses:" . $semester . ":" . $keyword_params;
 $courses_json = NULL;
 //check cache
-if ($cache = \Drupal::cache('data')->get($cid)) {
+//if ($cache = \Drupal::cache('data')->get($cid)) {
     //fetch cache data
-    $courses_json = $cache->data;
-} else {
+    //$courses_json = $cache->data;
+//} else {
     // if no cache data check url
     $url = "https://classes.cornell.edu/api/2.0/search/classes.json?roster={$semester}&subject={$keyword_params}";
     // Create the stream context
@@ -77,8 +82,58 @@ if ($cache = \Drupal::cache('data')->get($cid)) {
         \Drupal::cache('data')
             ->set($cid, $courses_json, time()+86400);
         }
-    }
+    //}
 //return courses data
+return $courses_json;
+}
+
+
+/**
+ * Fetches list of courses by semester and instructor netid
+ */
+
+function as_courses_get_courses_netid_json($semester,$netid) {
+//set cache id (verify parameters are safe values to use as cache id)
+$cid = "as_courses:" . $netid;
+$courses_json = NULL;
+//check cache
+//if ($cache = \Drupal::cache('data')->get($cid)) {
+    //fetch cache data
+    //$courses_json = $cache->data;
+//} else {
+    // if no cache data check url
+    
+    $url = "https://dev-classes.ssit.cucloud.net/api/2.0/search/classes.json?roster={$semester}&instructor={$netid}";
+
+    // curl
+    //curl request
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_URL,$url);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); 
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10); //timeout in seconds
+
+    $data = curl_exec($ch);
+    //$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if (!empty($data)) {
+        //dump($data);
+        $json = json_decode($data, true);
+        //dump($json['data']['classes']);
+    }
+
+    if (!empty($json['data']['classes'])) {
+        $courses_json = $json['data']['classes'];
+        // set cache
+        //\Drupal::cache('data')
+            //->set($cid, $courses_json, time()+86400);
+        }
+    //}
+
+//return courses data
+//$dump($courses_json);
 return $courses_json;
 }
 
