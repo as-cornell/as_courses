@@ -36,7 +36,7 @@ class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension
    * @return array $person_course_record
    *   data in array for theming
    */
-  public function parse_person_courses_json($semester,$keyword_params,$netid)
+  public function parse_person_courses_json($semester,$subject,$netid)
   {
     $courses_json = [];
     $person_course_record = [];
@@ -48,7 +48,7 @@ class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension
     //}
 
 
-    $courses_json = as_courses_get_courses_json($semester,$keyword_params);
+    $courses_json = as_courses_get_courses_json($semester,$subject);
     //$dump($courses_json);
 
     if (!empty($courses_json)) {

@@ -36,7 +36,7 @@ class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtensio
    * @return array $person_course_record
    *   data in array for theming
    */
-  public function parse_person_courses_netid_prefix_json($semester,$keyword_params,$netid)
+  public function parse_person_courses_netid_prefix_json($semester,$subjects,$netid)
   {
     $person_course_record = [];
     $filtersubject = '';
@@ -53,9 +53,9 @@ class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtensio
       foreach ($courses_json as $course_json) {
         $filtersubject = $course_json['subject'];
         if (!empty($filtersubject)){
-          foreach ($keyword_params as $keyword_param) {     
+          foreach ($subjects as $subject) {     
             //check each record for $netid
-            if ($filtersubject === $keyword_param) {
+            if ($filtersubject === $subject) {
               $course_record = array(
                 'subject' => $course_json['subject'], 
                 'number' => $course_json['catalogNbr'], 

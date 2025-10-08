@@ -41,16 +41,16 @@ class CoursesBlock extends BlockBase {
       $courses_shown = 0;
     }
     if (!empty($config['keyword_params'])) {
-      $keyword_params = $config['keyword_params'];
+      $subjects = $config['keyword_params'];
     }
     else {
-      $keyword_params = "PSYCH";
+      $subjects = "PSYCH";
     }
 
     $build = [];
     $build['courses_block']['#markup'] = "";
     $course_count = 0;
-    $course_json = as_courses_get_courses_json($semester,$keyword_params);
+    $course_json = as_courses_get_courses_json($semester,$subjects);
     if (!empty($course_json)) {
       foreach($course_json as $course_data) {
         if ($course_count <= $courses_shown) {
@@ -59,7 +59,7 @@ class CoursesBlock extends BlockBase {
         }
 
       }
-      $build['courses_block']['#markup'] = $build['courses_block']['#markup'] . "<div><a href='https://classes.cornell.edu/browse/roster/" . $semester . "/subject/" . $keyword_params . "'>Full Listing of " . $keyword_params. " courses for " . $semestername . " Semester</a></div>";
+      $build['courses_block']['#markup'] = $build['courses_block']['#markup'] . "<div><a href='https://classes.cornell.edu/browse/roster/" . $semester . "/subject/" . $subjects . "'>Full Listing of " . $subjects. " courses for " . $semestername . " Semester</a></div>";
     } // There were no courses
     else {
       $build['courses_block']['#markup'] = "<main>

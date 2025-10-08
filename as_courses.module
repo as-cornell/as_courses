@@ -33,9 +33,9 @@ return ucfirst($string);
  * Fetches list of courses by semester and course prefix
  */
 
-function as_courses_get_courses_json($semester,$keyword_params) {
+function as_courses_get_courses_json($semester,$subjects) {
 //set cache id (verify parameters are safe values to use as cache id)
-$cid = "as_courses:" . $semester . ":" . $keyword_params;
+$cid = "as_courses:" . $semester . ":" . $subjects;
 $courses_json = NULL;
 //check cache
 if ($cache = \Drupal::cache('data')->get($cid)) {
@@ -43,11 +43,11 @@ if ($cache = \Drupal::cache('data')->get($cid)) {
     $courses_json = $cache->data;
 } else {
     // if no cache data check url
-    $url = "https://classes.cornell.edu/api/2.0/search/classes.json?roster={$semester}&subject={$keyword_params}";
+    $url = "https://classes.cornell.edu/api/2.0/search/classes.json?roster={$semester}&subject={$subjects}";
 
     // get file contents
     //if (($data = @file_get_contents($url, 0, $context)) === false) {
-        //printf("<h3>No courses found on https://classes.cornell.edu for semester:{$semester} and keyword:{$keyword_params}</h3>\n");
+        //printf("<h3>No courses found on https://classes.cornell.edu for semester:{$semester} and keyword:{$subjects}</h3>\n");
         //return;
    // } else {
         //$data = @file_get_contents($url, 0, $context);
@@ -97,7 +97,7 @@ if ($cache = \Drupal::cache('data')->get($cid)) {
     $courses_json = $cache->data;
 } else {
     // if no cache data check url
-    $url = "https://dev-classes.ssit.cucloud.net/api/2.0/search/classes.json?roster={$semester}&instructor={$netid}";
+    $url = "https://classes.cornell.edu/api/2.0/search/classes.json?roster={$semester}&instructor={$netid}";
 
     // curl
     //curl request

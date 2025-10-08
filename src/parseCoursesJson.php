@@ -36,7 +36,7 @@ class parseCoursesJson extends \Twig\Extension\AbstractExtension
    * @return array $course_record
    *   data in array for theming
    */
-  public function parse_courses_json($semester,$keyword_params,$courses_shown,$list_order)
+  public function parse_courses_json($semester,$subjects,$courses_shown,$list_order)
   {
     $course_record = [];
 
@@ -46,7 +46,7 @@ class parseCoursesJson extends \Twig\Extension\AbstractExtension
     $course_count = 0;
     }
 
-    $courses_json = as_courses_get_courses_json($semester,$keyword_params);
+    $courses_json = as_courses_get_courses_json($semester,$subjects);
     //dump($courses_json);
     //multiple random courses with shuffle()
     //https://www.w3schools.com/php/func_array_shuffle.asp
