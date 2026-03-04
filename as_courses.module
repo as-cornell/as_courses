@@ -9,10 +9,23 @@ use Drupal\Core\Routing\RouteMatchInterface;
 
 
 /**
- * Fetches list of courses by semester and course prefix
+ * Fetches list of courses by semester and course prefix.
+ *
+ * @param string $semester
+ *   The semester code (e.g., 'SP26', 'FA25').
+ * @param string $subjects
+ *   Comma-separated list of subject codes (e.g., 'PSYCH,ECON').
+ *
+ * @return array|null
+ *   Array of course data, or NULL if no courses found.
+ *
+ * @deprecated in as_courses:2.0.0 and will be removed in as_courses:3.0.0.
+ *   Use \Drupal::service('as_courses.api')->getCoursesBySubject() instead.
+ *
+ * @see \Drupal\as_courses\Service\CoursesApiService::getCoursesBySubject()
  */
-
-function as_courses_get_courses_json($semester,$subjects) {
+function as_courses_get_courses_json($semester, $subjects) {
+  @trigger_error('as_courses_get_courses_json() is deprecated in as_courses:2.0.0 and will be removed in as_courses:3.0.0. Use \Drupal::service(\'as_courses.api\')->getCoursesBySubject() instead.', E_USER_DEPRECATED);
 // set cache id (verify parameters are safe values to use as cache id)
 $cid = "as_courses:" . $semester . ":" . $subjects;
 $courses_json = NULL;
@@ -55,10 +68,23 @@ return $courses_json;
 
 
 /**
- * Fetches list of courses by semester and instructor netid
+ * Fetches list of courses by semester and instructor netid.
+ *
+ * @param string $semester
+ *   The semester code (e.g., 'SP26', 'FA25').
+ * @param string $netid
+ *   The instructor's Cornell NetID.
+ *
+ * @return array|null
+ *   Array of course data, or NULL if no courses found.
+ *
+ * @deprecated in as_courses:2.0.0 and will be removed in as_courses:3.0.0.
+ *   Use \Drupal::service('as_courses.api')->getCoursesByInstructor() instead.
+ *
+ * @see \Drupal\as_courses\Service\CoursesApiService::getCoursesByInstructor()
  */
-
-function as_courses_get_courses_netid_json($semester,$netid) {
+function as_courses_get_courses_netid_json($semester, $netid) {
+  @trigger_error('as_courses_get_courses_netid_json() is deprecated in as_courses:2.0.0 and will be removed in as_courses:3.0.0. Use \Drupal::service(\'as_courses.api\')->getCoursesByInstructor() instead.', E_USER_DEPRECATED);
 //set cache id (verify parameters are safe values to use as cache id)
 $cid = "as_courses:" . $semester . ":" . $netid;
 $courses_json = NULL;

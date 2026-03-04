@@ -2,11 +2,40 @@
 
 namespace Drupal\as_courses;
 
+use Drupal\as_courses\Service\CoursesApiService;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
- * extend Drupal's Twig_Extension class
+ * Twig extension for parsing person courses by NetID and subject prefix.
  */
-class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtension
-{
+class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtension implements ContainerInjectionInterface {
+
+  /**
+   * The courses API service.
+   *
+   * @var \Drupal\as_courses\Service\CoursesApiService
+   */
+  protected $coursesApi;
+
+  /**
+   * Constructs a parsePersonCoursesNetidPrefixJson object.
+   *
+   * @param \Drupal\as_courses\Service\CoursesApiService $courses_api
+   *   The courses API service.
+   */
+  public function __construct(CoursesApiService $courses_api) {
+    $this->coursesApi = $courses_api;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('as_courses.api')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -47,7 +76,7 @@ class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtensio
       //$showdebug = TRUE;
     //}
 
-    $courses_json = as_courses_get_courses_netid_json($semester,$netid);
+    $courses_json = $this->coursesApi->getCoursesByInstructor($semester, $netid);
     //$dump($courses_json);
 
     if (!empty($courses_json[0])) {

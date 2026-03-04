@@ -2,11 +2,40 @@
 
 namespace Drupal\as_courses;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
- * extend Drupal's Twig_Extension class
+ * Twig extension for getting current semesters.
  */
-class getCurrentSemesters extends \Twig\Extension\AbstractExtension
-{
+class getCurrentSemesters extends \Twig\Extension\AbstractExtension implements ContainerInjectionInterface {
+
+  /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Constructs a getCurrentSemesters object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory) {
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -38,9 +67,9 @@ class getCurrentSemesters extends \Twig\Extension\AbstractExtension
    */
   public function get_current_semesters()
   {
-    
 
-    $config = \Drupal::config("as_courses.defaults")->get("semester");
+
+    $config = $this->configFactory->get("as_courses.defaults")->get("semester");
     if (!empty($config)) {
       // filter out unchecked items
       $semesters = array_filter($config);

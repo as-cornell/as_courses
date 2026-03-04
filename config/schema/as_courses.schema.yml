@@ -1,0 +1,39 @@
+# Schema for the configuration files of the as_courses module.
+
+as_courses.settings:
+  type: config_object
+  label: 'AS Courses Settings'
+  mapping:
+    semester_start_year_offset:
+      type: integer
+      label: 'Semester start year offset'
+      description: 'Number of years before current year to start generating semesters (e.g., -1 for last year).'
+    semester_end_year_offset:
+      type: integer
+      label: 'Semester end year offset'
+      description: 'Number of years after current year to generate semesters (e.g., 5 for five years ahead).'
+    api_timeout:
+      type: integer
+      label: 'API timeout'
+      description: 'Timeout in seconds for Cornell Classes API requests.'
+    cache_duration:
+      type: integer
+      label: 'Cache duration'
+      description: 'Duration in seconds to cache API responses.'
+
+as_courses.defaults:
+  type: config_object
+  label: 'AS Courses Default Settings'
+  mapping:
+    semester:
+      type: sequence
+      label: 'Selected semesters'
+      sequence:
+        type: string
+        label: 'Semester code'
+    defaultsemester:
+      type: string
+      label: 'Default semester'
+    course_prefixes:
+      type: string
+      label: 'Course prefixes'

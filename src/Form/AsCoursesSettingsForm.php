@@ -1,75 +1,89 @@
 <?php
+
 namespace Drupal\as_courses\Form;
+
+use Drupal\as_courses\Service\SemesterGeneratorService;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Utility\MapArray;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
+/**
+ * Configuration form for AS Courses default settings.
+ */
 class AsCoursesSettingsForm extends ConfigFormBase {
 
-    /**
-    *array An array of configuration object names that are editable
-	*/
-   protected function getEditableConfigNames() {
-   return ['as_courses.defaults'];
+  /**
+   * The semester generator service.
+   *
+   * @var \Drupal\as_courses\Service\SemesterGeneratorService
+   */
+  protected $semesterGenerator;
+
+  /**
+   * Constructs an AsCoursesSettingsForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \Drupal\as_courses\Service\SemesterGeneratorService $semester_generator
+   *   The semester generator service.
+   */
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    SemesterGeneratorService $semester_generator
+  ) {
+    parent::__construct($config_factory);
+    $this->semesterGenerator = $semester_generator;
   }
 
-   public function getFormID() {
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('as_courses.semester_generator')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return ['as_courses.defaults'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormID() {
     return 'as_courses_settings_form';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $config = $this->config('as_courses.defaults');  //since we are extending ConfigFormBase instead of FormBase, it gives use access to the config object
+    $config = $this->config('as_courses.defaults');
 
+    // Get dynamic semester options from the semester generator service.
+    $semester_options = $this->semesterGenerator->getSemesterOptions();
 
-    // want to convert this to a list of real semesters from https://classes.cornell.edu/content/SP26/api-details, or split into function to build out list for Fall, Winter, Spring, Summer semesters for every year 2020-2035.  use for semster and default semester below.
-    $form['semester'] = array(
-    '#type' => 'checkboxes',
-    '#title' => t('Semesters to display in tabs.'),
-    '#description' => t('Will only display tabs if more than one semester is selected.'),
-    '#options' => array(
-     'FA23' => t('Fall 2023'),
-     'WI24' => t('Winter 2024'),
-     'SP24' => t('Spring 2024'),
-     'SU24' => t('Summer 2024'),
-     'FA24' => t('Fall 2024'),
-     'WI25' => t('Winter 2025'),
-     'SP25' => t('Spring 2025'),
-     'SU25' => t('Summer 2025'),
-     'FA25' => t('Fall 2025'),
-     'WI26' => t('Winter 2026'),
-     'SP26' => t('Spring 2026'),
-     'SU26' => t('Summer 2026'),
-     'FA26' => t('Fall 2026'),
-     'WI27' => t('Winter 2027'),
-     'SP27' => t('Spring 2027'),
-     'SU27' => t('Summer 2027'),
-     'FA27' => t('Fall 2027'),
-   ),
-   '#default_value' => $config->get('semester')
-  );
+    $form['semester'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Semesters to display in tabs.'),
+      '#description' => $this->t('Will only display tabs if more than one semester is selected.'),
+      '#options' => $semester_options,
+      '#default_value' => $config->get('semester') ?: [],
+    ];
 
-    $form['defaultsemester'] = array(
-    '#type' => 'select',
-    '#title' => t('Default semester to display at /courses.'),
-    '#options' => array(
-     'FA23' => t('Fall 2023'),
-     'SP24' => t('Spring 2024'),
-     'SU24' => t('Summer 2024'),
-     'FA24' => t('Fall 2024'),
-     'SP25' => t('Spring 2025'),
-     'SU25' => t('Summer 2025'),
-     'FA25' => t('Fall 2025'),
-     'SP26' => t('Spring 2026'),
-     'SU26' => t('Summer 2026'),
-     'FA26' => t('Fall 2026'),
-     'SP27' => t('Spring 2027'),
-     'SU27' => t('Summer 2027'),
-     'FA27' => t('Fall 2027'),
-   ),
-   '#default_value' => $config->get('defaultsemester')
-  );
+    $form['defaultsemester'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Default semester to display at /courses.'),
+      '#options' => $semester_options,
+      '#default_value' => $config->get('defaultsemester'),
+    ];
 
   // Course prefixes in case there's no prefixes via department theme settings, for example on AS
   $form['course_prefixes'] = array(
@@ -83,18 +97,15 @@ class AsCoursesSettingsForm extends ConfigFormBase {
   }
 
   /**
-   * Form submission handler.
-   *
-   *  $form -> An associative array containing the structure of the form.
-   *  $form_state -> An associative array containing the current state of the form.
+   * {@inheritdoc}
    */
-
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('as_courses.defaults')
       ->set('semester', $form_state->getValue('semester'))
       ->set('defaultsemester', $form_state->getValue('defaultsemester'))
       ->set('course_prefixes', $form_state->getValue('course_prefixes'))
-      ->set('sort', $form_state->getValue('sort'))
       ->save();
+
+    parent::submitForm($form, $form_state);
   }
 }

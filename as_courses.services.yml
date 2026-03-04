@@ -1,25 +1,47 @@
 services:
+  # Core API service for Cornell Classes API interactions.
+  as_courses.api:
+    class: Drupal\as_courses\Service\CoursesApiService
+    arguments: ['@http_client', '@cache.default', '@logger.channel.as_courses', '@config.factory']
+
+  # Semester generator service for dynamic semester list generation.
+  as_courses.semester_generator:
+    class: Drupal\as_courses\Service\SemesterGeneratorService
+    arguments: ['@datetime.time', '@config.factory']
+
+  # Logger channel for AS Courses module.
+  logger.channel.as_courses:
+    parent: logger.channel_base
+    arguments: ['as_courses']
+
+  # Twig extensions with dependency injection.
   as_courses.parseCoursesJson:
     class: Drupal\as_courses\parseCoursesJson
+    arguments: ['@as_courses.api']
     tags:
       - { name: twig.extension }
   as_courses.parsePersonCoursesJson:
     class: Drupal\as_courses\parsePersonCoursesJson
+    arguments: ['@as_courses.api']
     tags:
       - { name: twig.extension }
   as_courses.parsePersonCoursesNetidJson:
     class: Drupal\as_courses\parsePersonCoursesNetidJson
+    arguments: ['@as_courses.api']
     tags:
       - { name: twig.extension }
   as_courses.parsePersonCoursesNetidPrefixJson:
     class: Drupal\as_courses\parsePersonCoursesNetidPrefixJson
+    arguments: ['@as_courses.api']
     tags:
       - { name: twig.extension }
   as_courses.parseSemesterName:
     class: Drupal\as_courses\parseSemesterName
+    arguments: ['@as_courses.semester_generator']
     tags:
       - { name: twig.extension }
   as_courses.getCurrentSemesters:
     class: Drupal\as_courses\getCurrentSemesters
+    arguments: ['@config.factory']
     tags:
       - { name: twig.extension }

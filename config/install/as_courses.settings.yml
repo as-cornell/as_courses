@@ -1,0 +1,11 @@
+# Default configuration for the AS Courses module.
+
+# Generate semesters from 1 year ago to 5 years in the future.
+semester_start_year_offset: -1
+semester_end_year_offset: 5
+
+# API timeout in seconds.
+api_timeout: 10
+
+# Cache duration in seconds (1 hour = 3600 seconds).
+cache_duration: 3600

@@ -2,11 +2,40 @@
 
 namespace Drupal\as_courses;
 
+use Drupal\as_courses\Service\CoursesApiService;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
- * extend Drupal's Twig_Extension class
+ * Twig extension for parsing person courses JSON data.
  */
-class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension
-{
+class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension implements ContainerInjectionInterface {
+
+  /**
+   * The courses API service.
+   *
+   * @var \Drupal\as_courses\Service\CoursesApiService
+   */
+  protected $coursesApi;
+
+  /**
+   * Constructs a parsePersonCoursesJson object.
+   *
+   * @param \Drupal\as_courses\Service\CoursesApiService $courses_api
+   *   The courses API service.
+   */
+  public function __construct(CoursesApiService $courses_api) {
+    $this->coursesApi = $courses_api;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('as_courses.api')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -49,7 +78,7 @@ class parsePersonCoursesJson extends \Twig\Extension\AbstractExtension
     //}
 
 
-    $courses_json = as_courses_get_courses_json($semester,$subject);
+    $courses_json = $this->coursesApi->getCoursesBySubject($semester, $subject);
     if (!empty($courses_json)) {
       foreach ($courses_json as $course_json) {
         //$dump($course_data['data']['classes']);

@@ -2,11 +2,40 @@
 
 namespace Drupal\as_courses;
 
+use Drupal\as_courses\Service\SemesterGeneratorService;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
- * extend Drupal's Twig_Extension class
+ * Twig extension for parsing semester names.
  */
-class parseSemesterName extends \Twig\Extension\AbstractExtension
-{
+class parseSemesterName extends \Twig\Extension\AbstractExtension implements ContainerInjectionInterface {
+
+  /**
+   * The semester generator service.
+   *
+   * @var \Drupal\as_courses\Service\SemesterGeneratorService
+   */
+  protected $semesterGenerator;
+
+  /**
+   * Constructs a parseSemesterName object.
+   *
+   * @param \Drupal\as_courses\Service\SemesterGeneratorService $semester_generator
+   *   The semester generator service.
+   */
+  public function __construct(SemesterGeneratorService $semester_generator) {
+    $this->semesterGenerator = $semester_generator;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('as_courses.semester_generator')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -38,20 +67,11 @@ class parseSemesterName extends \Twig\Extension\AbstractExtension
    */
   public function parse_semester_name($semester)
   {
-    
-    if (!empty($semester)) {
-      // apply replace patterns
-      $semester_name = $semester;
-      $semester_name = str_replace('SP','Spring ',$semester_name);
-      $semester_name = str_replace('SU','Summer ',$semester_name);
-      $semester_name = str_replace('FA','Fall ',$semester_name);
-      $semester_name = str_replace('WI','Winter ',$semester_name);
-      $semester_name = str_replace('24','2024',$semester_name);
-      $semester_name = str_replace('25','2025',$semester_name);
-      $semester_name = str_replace('26','2026',$semester_name);
-      $semester_name = str_replace('27','2027',$semester_name);
 
+    if (!empty($semester)) {
+      // Use the semester generator service to format the name.
+      return $this->semesterGenerator->formatSemesterName($semester);
     }
-    return $semester_name;
+    return $semester;
   }
 }

@@ -2,11 +2,40 @@
 
 namespace Drupal\as_courses;
 
+use Drupal\as_courses\Service\CoursesApiService;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
- * extend Drupal's Twig_Extension class
+ * Twig extension for parsing courses JSON data.
  */
-class parseCoursesJson extends \Twig\Extension\AbstractExtension
-{
+class parseCoursesJson extends \Twig\Extension\AbstractExtension implements ContainerInjectionInterface {
+
+  /**
+   * The courses API service.
+   *
+   * @var \Drupal\as_courses\Service\CoursesApiService
+   */
+  protected $coursesApi;
+
+  /**
+   * Constructs a parseCoursesJson object.
+   *
+   * @param \Drupal\as_courses\Service\CoursesApiService $courses_api
+   *   The courses API service.
+   */
+  public function __construct(CoursesApiService $courses_api) {
+    $this->coursesApi = $courses_api;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('as_courses.api')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -46,7 +75,7 @@ class parseCoursesJson extends \Twig\Extension\AbstractExtension
     $course_count = 0;
     }
 
-    $courses_json = as_courses_get_courses_json($semester,$subjects);
+    $courses_json = $this->coursesApi->getCoursesBySubject($semester, $subjects);
     //multiple random courses with shuffle()
     //https://www.w3schools.com/php/func_array_shuffle.asp
     if ($list_order == 'random'){
