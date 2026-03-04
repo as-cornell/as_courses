@@ -41,12 +41,12 @@ class parsePersonCoursesNetidJson extends \Twig\Extension\AbstractExtension
     $person_course_record = [];
     $course_record = [];
     $showdebug = '';
+    // would like to change this to use a similar approach as in web/modules/custom/as_people_ldap
     //if (PANTHEON_ENVIRONMENT == 'lando' || PANTHEON_ENVIRONMENT == 'dev'){
       //$showdebug = TRUE;
     //}
 
     $courses_json = as_courses_get_courses_netid_json($semester,$netid);
-    //$dump($courses_json);
 
     if (!empty($courses_json[0])) {
       foreach ($courses_json as $course_json) {

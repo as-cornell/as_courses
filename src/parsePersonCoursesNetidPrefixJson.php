@@ -42,6 +42,7 @@ class parsePersonCoursesNetidPrefixJson extends \Twig\Extension\AbstractExtensio
     $filtersubject = '';
     $course_record = [];
     $showdebug = '';
+    // would like to change this to use a similar approach as in web/modules/custom/as_people_ldap
     //if (PANTHEON_ENVIRONMENT == 'lando' || PANTHEON_ENVIRONMENT == 'dev'){
       //$showdebug = TRUE;
     //}

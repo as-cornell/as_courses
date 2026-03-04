@@ -41,7 +41,6 @@ class parseSemesterName extends \Twig\Extension\AbstractExtension
     
     if (!empty($semester)) {
       // apply replace patterns
-      //dump($semester);
       $semester_name = $semester;
       $semester_name = str_replace('SP','Spring ',$semester_name);
       $semester_name = str_replace('SU','Summer ',$semester_name);

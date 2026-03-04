@@ -47,7 +47,6 @@ class parseCoursesJson extends \Twig\Extension\AbstractExtension
     }
 
     $courses_json = as_courses_get_courses_json($semester,$subjects);
-    //dump($courses_json);
     //multiple random courses with shuffle()
     //https://www.w3schools.com/php/func_array_shuffle.asp
     if ($list_order == 'random'){

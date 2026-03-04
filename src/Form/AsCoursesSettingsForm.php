@@ -23,7 +23,7 @@ class AsCoursesSettingsForm extends ConfigFormBase {
     $config = $this->config('as_courses.defaults');  //since we are extending ConfigFormBase instead of FormBase, it gives use access to the config object
 
 
-
+    // want to convert this to a list of real semesters from https://classes.cornell.edu/content/SP26/api-details, or split into function to build out list for Fall, Winter, Spring, Summer semesters for every year 2020-2035.  use for semster and default semester below.
     $form['semester'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Semesters to display in tabs.'),
@@ -71,7 +71,7 @@ class AsCoursesSettingsForm extends ConfigFormBase {
    '#default_value' => $config->get('defaultsemester')
   );
 
-  // Course prefixes in case there's no prefixes via department theme settings
+  // Course prefixes in case there's no prefixes via department theme settings, for example on AS
   $form['course_prefixes'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Course Prefixes'),
