@@ -13,7 +13,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
  */
 
 function as_courses_get_courses_json($semester,$subjects) {
-//set cache id (verify parameters are safe values to use as cache id)
+// set cache id (verify parameters are safe values to use as cache id)
 $cid = "as_courses:" . $semester . ":" . $subjects;
 $courses_json = NULL;
 //check cache
@@ -24,13 +24,6 @@ if ($cache = \Drupal::cache('data')->get($cid)) {
     // if no cache data check url
     $url = "https://classes.cornell.edu/api/2.0/search/classes.json?roster={$semester}&subject={$subjects}";
 
-    // get file contents
-    //if (($data = @file_get_contents($url, 0, $context)) === false) {
-        //printf("<h3>No courses found on https://classes.cornell.edu for semester:{$semester} and keyword:{$subjects}</h3>\n");
-        //return;
-   // } else {
-        //$data = @file_get_contents($url, 0, $context);
-    //}
     // curl
     //curl request
     $ch = curl_init();
@@ -47,7 +40,6 @@ if ($cache = \Drupal::cache('data')->get($cid)) {
     if (!empty($data)) {
         //dump($data);
         $json = json_decode($data, true);
-        //dump($json);
     }
 
     if (!empty($json['data']['classes'])) {
@@ -92,7 +84,6 @@ if ($cache = \Drupal::cache('data')->get($cid)) {
     curl_close($ch);
 
     if (!empty($data)) {
-        //dump($data);
         $json = json_decode($data, true);
         //dump($json['data']['classes']);
     }
@@ -106,7 +97,6 @@ if ($cache = \Drupal::cache('data')->get($cid)) {
     }
 
 //return courses data
-//$dump($courses_json);
 return $courses_json;
 }
 
