@@ -91,7 +91,9 @@ class CoursesApiService {
 
     // Check cache first.
     if ($cache = $this->cache->get($cid)) {
-      return $cache->data;
+      if (!empty($cache->data)) {
+        return $cache->data;
+      }
     }
 
     // Build API URL.
@@ -119,7 +121,9 @@ class CoursesApiService {
 
     // Check cache first.
     if ($cache = $this->cache->get($cid)) {
-      return $cache->data;
+      if (!empty($cache->data)) {
+        return $cache->data;
+      }
     }
 
     // Build API URL.
@@ -158,7 +162,7 @@ class CoursesApiService {
       if (!empty($data)) {
         $json = json_decode($data, TRUE);
 
-        if (!empty($json['data']['classes'])) {
+        if (is_array($json) && !empty($json['data']['classes'])) {
           $courses_json = $json['data']['classes'];
 
           // Set cache.
